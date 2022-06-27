@@ -56,7 +56,6 @@
                   <MenuItems
                     class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                   >
-
                     <MenuItem v-slot="{ active }">
                       <a
                         :class="[
@@ -170,9 +169,10 @@ export default {
     const router = useRouter();
 
     function logout() {
-      store.commit("logout");
-      router.push({
-        name: "Login",
+      store.dispatch("logout").then(() => {
+        router.push({
+          name: "Login",
+        });
       });
     }
 
