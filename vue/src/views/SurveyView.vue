@@ -124,6 +124,45 @@
           </div>
           <!--/ Status -->
         </div>
+
+        <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+          <h3 class="text-2xl font-semibold flex items-center justify-between">
+            Questions
+
+            <button
+              type="button"
+              class="flex items-center text-sm py-1 px-4 rounded-sm text-white bg-gray-600 hover:bg-gray-700"
+              @click="addQuestion()"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              Add Question
+            </button>
+          </h3>
+          <div v-if="!model.questions.length" class="text-center text-gray-600">
+            You don't have any questions created
+          </div>
+          <div v-for="(question, index) in model.questions" :key="question.id">
+            <QuestionEditor
+              :question="question"
+              :index="index"
+              @change="questionChange"
+              @addQuestion="addQuestion"
+              @deleteQuestion="deleteQuestion"
+            />
+          </div>
+        </div>
+
         <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
           <button
             type="submit"
@@ -143,6 +182,7 @@ import { useRoute } from "vue-router";
 import { ref } from "vue";
 
 import PageComponent from "../components/PageComponent.vue";
+import QuestionEditor from "../components/editor/QuestionEditor.vue";
 
 const route = useRoute();
 
@@ -152,7 +192,7 @@ let model = ref({
   description: null,
   image: null,
   expire_date: null,
-  question: [],
+  questions: [],
 });
 
 if (route.params.id) {
