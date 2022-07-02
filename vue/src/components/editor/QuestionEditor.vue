@@ -187,7 +187,7 @@ const props = defineProps({
   index: Number,
 });
 
-const emits = defineEmits(["change", "addQuestion", "deleteQuestion"]);
+const emit = defineEmits(["change", "addQuestion", "deleteQuestion"]);
 
 const model = ref(JSON.parse(JSON.stringify(props.question)));
 
@@ -233,5 +233,12 @@ function dataChange() {
   }
 
   // emit("change", data);
+}
+
+function addQuestion() {
+  emit("addQuestion", props.index + 1);
+}
+function deleteQuestion() {
+  emit("deleteQuestion", props.question);
 }
 </script>
