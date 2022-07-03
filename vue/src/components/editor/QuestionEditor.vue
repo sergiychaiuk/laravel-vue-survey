@@ -232,7 +232,7 @@ function dataChange() {
     delete data.data.options;
   }
 
-  // emit("change", data);
+  emit("change", data);
 }
 
 function addQuestion() {
