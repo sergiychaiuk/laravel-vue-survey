@@ -3,11 +3,14 @@
     <template #header>
       <div class="flex items-center justify-between">
         <h1 class="text-3xl font-bold text-gray-900">
-          {{ model.id ? model.title : "Create a Survey" }}
+          {{ route.params.id ? model.title : "Create a Survey" }}
         </h1>
       </div>
     </template>
-    <form @submit.prevent="saveSurvey">
+
+    <div v-if="surveyLoading" class="flex justify-center">Loading...</div>
+
+    <form v-else @submit.prevent="saveSurvey">
       <div class="shadow sm:rounded-md sm:overflow-hidden">
         <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
           <!-- Image -->
@@ -181,13 +184,14 @@
 import { v4 as uuidv4 } from "uuid";
 import store from "../store";
 import { useRoute, useRouter } from "vue-router";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 
 import PageComponent from "../components/PageComponent.vue";
 import QuestionEditor from "../components/editor/QuestionEditor.vue";
 
 const route = useRoute();
 const router = useRouter();
+const surveyLoading = computed(() => store.state.currentSurvey.loading);
 
 let model = ref({
   title: "",
@@ -197,7 +201,6 @@ let model = ref({
   expire_date: null,
   questions: [],
 });
-
 
 // Watch to current survey data change and when this happens we update local model
 watch(
@@ -212,7 +215,7 @@ watch(
 
 // If the current component is rendered on survey update route we make a request to fetch survey
 if (route.params.id) {
-  store.dispatch('getSurvey', route.params.id);
+  store.dispatch("getSurvey", route.params.id);
 }
 
 function onImageChoose(ev) {
