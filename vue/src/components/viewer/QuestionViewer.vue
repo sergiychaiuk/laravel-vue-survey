@@ -16,7 +16,11 @@
           @change="emits('update:modelValue', $event.target.value)"
         >
           <option value="">Please Select</option>
-          <option v-for="option in question.data.options" :key="option.uuid" :value="option.text">
+          <option
+            v-for="option in question.data.options"
+            :key="option.uuid"
+            :value="option.text"
+          >
             {{ option.text }}
           </option>
         </select>
@@ -97,5 +101,15 @@ const emits = defineEmits(["update:modelValue"]);
 let model;
 if (question.type === "checkbox") {
   model = ref({});
+}
+
+function onCheckboxChange($event) {
+  const selectedOptions = [];
+  for (let uuid in model.value) {
+    if (model.value[uuid]) {
+      selectedOptions.push(uuid);
+    }
+  }
+  emits("update:modelValue", selectedOptions);
 }
 </script>
